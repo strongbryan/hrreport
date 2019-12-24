@@ -1,5 +1,7 @@
 # hr_report
 
+> A Vue.js project. This is a single page used by the Chesapeake Region Volleyball Assocaition for reporting the charges for tournaments. Charges include sanction, admin fees, and referee fees.
+
 ## Project setup
 ```
 npm install
