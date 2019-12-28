@@ -251,7 +251,11 @@
     </v-layout>
     <v-row class="mb-1" justify="center">
       <v-col class="d-flex" cols="12" text-xs-center>
-        <div class="textblack">Save this completed page as a PDF and e-mail it to the Tournament Director and fred.mehl@chrva.org</div>
+        <div class="textblack">
+          Save this completed page as a PDF and e-mail it to the Tournament Director and fred.mehl@chrva.org<br>
+            <a href="https://www.techrepublic.com/article/how-to-save-a-website-as-a-pdf-in-android-chrome/" target="_blank">Android instructions to save this page as a PDF</a><br>
+            <a href="https://support.apple.com/en-us/HT205751" target="_blank">iPhone instructions to save this page as a PDF</a>
+        </div>
       </v-col>
     </v-row>
 
@@ -419,8 +423,9 @@ export default {
     text-align: center;
     border: 1px solid black;
     width: 100%;
-    height: 200px;
-    line-height: 200px;
+    margin-top: 80px;
+    /*height: 160px;
+    /*line-height: 50px;*/
   }
   .dFlex{
     display: flex;
