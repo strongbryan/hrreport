@@ -1,10 +1,10 @@
 export const APP_CONSTANTS = {
   adminFee: 30,
   arrayRefereeCertifications: [
-    { 'type': 'N', 'display': 'National', 'one': 12.5, 'two': 22.5, 'twoOfThree': 32.5 },
-    { 'type': 'JN', 'display': 'Junior National', 'one': 12.5, 'two': 22.5, 'twoOfThree': 32.5 },
-    { 'type': 'R', 'display': 'Regional', 'one': 12.5, 'two': 22.5, 'twoOfThree': 32.5 },
-    { 'type': 'P', 'display': 'Provisional', 'one': 12.5, 'two': 17.5, 'twoOfThree': 27.5 }
+    { 'type': 'N', 'display': 'National', 'one': 15, 'two': 31, 'twoOfThree': 36 },
+    { 'type': 'JN', 'display': 'Junior National', 'one': 15, 'two': 31, 'twoOfThree': 36 },
+    { 'type': 'R', 'display': 'Regional', 'one': 15, 'two': 30, 'twoOfThree': 35 },
+    { 'type': 'P', 'display': 'Provisional', 'one': 15, 'two': 25, 'twoOfThree': 30 }
   ],
   defCourt: 2,
   defNprCount: 2,
