@@ -339,7 +339,7 @@ export default {
       this.setCount3 = 0
       this.evalCount = 0
       this.selectedRefRating = ''
-      this.travelDistance = ''
+      this.travelDistance = '0'
       this.computeTotals()
     },
     computeTotals: function () {
