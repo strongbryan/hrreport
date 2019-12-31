@@ -253,8 +253,20 @@
       <v-col class="d-flex" cols="12" text-xs-center>
         <div class="textblack">
           Save this completed page as a PDF and e-mail it to the Tournament Director and fred.mehl@chrva.org<br>
-            <a href="https://www.techrepublic.com/article/how-to-save-a-website-as-a-pdf-in-android-chrome/" target="_blank">Android instructions to save this page as a PDF</a><br>
-            <a href="https://support.apple.com/en-us/HT205751" target="_blank">iPhone instructions to save this page as a PDF</a>
+          <div class="instructorFlex">
+            <div><a href="https://www.techrepublic.com/article/how-to-save-a-website-as-a-pdf-in-android-chrome/" target="_blank">Android instructions to save this page as a PDF</a></div>
+            <div>
+              iPhone instructions (iOS 13)
+              <ol>
+                <li>In Safari, complete the form.</li>
+                <li>Tap the Share button (square with an up arrow at the bottom of the window)</li>
+                <li>In the pop-up, find and tap Books. If Books is not a preferred or normal method, tap MORE to find it</li>
+                <li>The web page will save automagically to the Books App</li>
+                <li>While still in Books, Tap the Share button at the top, and tap your email client/provider</li>
+              </ol>
+            </div>
+          </div>
+            <br>
         </div>
       </v-col>
     </v-row>
@@ -437,7 +449,19 @@ export default {
   }
   .dFlex > div:last-child{
     width: 150px;
-    text-align: right;
+    text-align: left;
+    /*border: 1px solid green;/**/
+  }
+  .instructorFlex{
+    display: flex;
+  }
+  .instructorFlex > div:first-child{
+    width: 50%;
+    /*border: 1px solid red;/**/
+  }
+  .instructorFlex > div:last-child{
+    text-align: left;
+    width: 50%;
     /*border: 1px solid green;/**/
   }
   .strong {
