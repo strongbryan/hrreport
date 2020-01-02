@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-app-bar
+    <!--v-app-bar
       app
       color="white"
       light
@@ -15,14 +15,6 @@
           width="40"
         />
         <p>Chesapeake Head Referee Report</p>
-        <!--<v-img
-          alt="Vuetify Name"
-          class="shrink mt-1 hidden-sm-and-down"
-          contain
-          min-width="100"
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-name-dark.png"
-          width="100"
-        />-->
       </div>
 
       <v-spacer></v-spacer>
@@ -35,7 +27,7 @@
         <span class="mr-2">Region Homepage</span>
         <v-icon>mdi-open-in-new</v-icon>
       </v-btn>
-    </v-app-bar>
+    </v-app-bar-->
 
     <v-content>
       <HelloWorld/>

@@ -1,5 +1,49 @@
 <template>
   <v-container class="my-5">
+    <v-layout row wrap justify-space-around mx-1 mb-5>
+      <v-flex xs12 md6>
+        <div class="d-flex align-center">
+          <v-img
+            alt="USAV Chesapeake Region Logo"
+            class="shrink mr-2"
+            contain
+            :src="require('../assets/logo.gif')"
+            transition="scale-transition"
+            width="40"
+          />
+          <p>Chesapeake Region Head Referee Report</p>
+        </div>
+      </v-flex>
+      <v-flex xs12 md6>
+        <v-menu
+          v-model="fromDateMenu"
+          :close-on-content-click="false"
+          :nudge-right="40"
+          transition="scale-transition"
+          offset-y
+          max-width="290px"
+          min-width="290px"
+        >
+          <template v-slot:activator="{ on }">
+            <v-text-field
+              label="Tournament Date"
+              prepend-icon="mdi-calendar"
+              readonly
+              :value="fromDateDisp"
+              v-on="on"
+            ></v-text-field>
+          </template>
+          <v-date-picker
+            locale="en-in"
+            :min="minDate"
+            :max="maxDate"
+            v-model="fromDateVal"
+            no-title
+            @input="fromDateMenu = false"
+          ></v-date-picker>
+        </v-menu>
+      </v-flex>
+    </v-layout>
     <v-layout row wrap justify-space-around mx-1>
       <v-flex xs12 md3>
         <v-text-field
@@ -70,6 +114,7 @@
           v-model="refereeName"
           label='Referee Name'
           value=''
+          :counter="30"
           hint='Enter the name of a working referee'
           dense
         ></v-text-field>
@@ -141,7 +186,7 @@
       </v-col>
     </v-row>
     <v-row class="mb-1" justify="center">
-      <v-col cols="12">
+      <v-col cols="12" >
         <v-data-table
           :headers="headers"
           :items="refereeDetails"
@@ -249,33 +294,39 @@
         </div>
       </v-flex>
     </v-layout>
+    <v-layout row wrap justify-space-around mx-1>
+      <v-col class="d-flex" cols="12" text-xs-center>
+        <v-textarea
+          name="input-7-1"
+          label="Notes:"
+          value=""
+          v-model="notes"
+          hint="Put any notes you want to make in the report here."
+        ></v-textarea>
+      </v-col>
+    </v-layout>
+    <v-row class="mb-1" justify="center" v-if="refereeDetails.length == numOfNprs">
+      <v-col cols="2">
+        <v-btn
+          v-on:click="savePdf"
+          medium color="primary"
+        >Download</v-btn>
+      </v-col>
+    </v-row>
     <v-row class="mb-1" justify="center">
       <v-col class="d-flex" cols="12" text-xs-center>
         <div class="textblack">
-          Save this completed page as a PDF and e-mail it to the Tournament Director and fred.mehl@chrva.org<br>
-          <div class="instructorFlex">
-            <div><a href="https://www.techrepublic.com/article/how-to-save-a-website-as-a-pdf-in-android-chrome/" target="_blank">Android instructions to save this page as a PDF</a></div>
-            <div>
-              iPhone instructions (iOS 13)
-              <ol>
-                <li>In Safari, complete the form.</li>
-                <li>Tap the Share button (square with an up arrow at the bottom of the window)</li>
-                <li>In the pop-up, find and tap Books. If Books is not a preferred or normal method, tap MORE to find it</li>
-                <li>The web page will save automagically to the Books App</li>
-                <li>While still in Books, Tap the Share button at the top, and tap your email client/provider</li>
-              </ol>
-            </div>
-          </div>
-            <br>
+          Download this completed page and e-mail the resulting PDF to the Tournament Director and fred.mehl@chrva.org<br>
+          Note: A Download button will appear when the number of referees entered equals the Referee Count from above.
         </div>
       </v-col>
     </v-row>
-
   </v-container>
 </template>
 
 <script>
 import { APP_CONSTANTS } from '../constants'
+import JsPDF from 'jspdf'
 export default {
   name: 'HelloWorld',
 
@@ -298,6 +349,7 @@ export default {
     numOfNprs: APP_CONSTANTS.defNprCount,
     minCourtCount: APP_CONSTANTS.minCourtCount,
     playingLevel: '',
+    notes: '',
     tournamentLocation: '',
     headRefereeName: '',
     refereeName: '',
@@ -306,7 +358,7 @@ export default {
     setCount2: 0,
     setCount3: 0,
     evalCount: 0,
-    travelDistance: 0,
+    travelDistance: '',
     headers: [
       { text: 'Referee', align: 'left', sortable: false, value: 'referee' },
       { text: 'Rating', align: 'center', sortable: false, value: 'rating' },
@@ -322,21 +374,36 @@ export default {
     teamNoRef4: 0,
     tempRefereeRating: '',
     refereeDetails: [],
-    headRefFee: 6 // TODO this.hrFee.find(arr => arr.courts === this.numOfCourts).fee
+    headRefFee: 6, // TODO this.hrFee.find(arr => arr.courts === this.numOfCourts).fee
+    fromDateMenu: false,
+    fromDateVal: new Date().toISOString().split('T')[0], // .toLocaleDateString('en-US'), // '2020-01-01',  //'en-US'
+    minDate: '2019-07-04',
+    maxDate: '2020-08-30'
   }),
   methods: {
     saveRefereeRow: function (event) {
+      var error = ''
+      if (this.refereeName.length > 30) error += 'The referee name cannot be longer than 30 characters\n'
+      if (isNaN(this.evalCount)) error += 'You must enter a number for the number of evaluations\n'
+      if (isNaN(this.travelDistance)) error += 'You must enter a number for the travel distance\n'
+      if (isNaN(this.setCount1)) error += 'You must enter a number for number of 1 set matches worked\n'
+      if (isNaN(this.setCount2)) error += 'You must enter a number for number of 2 set matches worked\n'
+      if (isNaN(this.setCount3)) error += 'You must enter a number for number of 2 of 3 set matches worked\n'
+      if (error.length > 0) {
+        alert('Sorry. Errors were found\n\n' + error)
+        return false
+      }
       const getInfo = this.arrayRefereeCertifications.find(type => type.type === this.tempRefereeRating)
       var matchFees = this.setCount1 * getInfo.one + this.setCount2 * getInfo.two + this.setCount3 * getInfo.twoOfThree || 0
       var t = {
         'referee': this.refereeName,
-        'setCount1': this.setCount1 + ' @ ' + this.formatCurrency(getInfo.one),
-        'set1': this.setCount1,
-        'setCount2': this.setCount2 + ' @ ' + this.formatCurrency(getInfo.two),
-        'set2': this.setCount2,
-        'setCount3': this.setCount3 + ' @ ' + this.formatCurrency(getInfo.twoOfThree),
-        'set3': this.setCount3,
-        'evalCount': this.evalCount,
+        'setCount1': this.setCount1.length === 0 ? '0 @ ' + this.formatCurrency(getInfo.one) : this.setCount1 + ' @ ' + this.formatCurrency(getInfo.one),
+        'set1': this.setCount1.length === 0 ? 0 : this.setCount1,
+        'setCount2': this.setCount2.length === 0 ? '0 @ ' + this.formatCurrency(getInfo.two) : this.setCount2 + ' @ ' + this.formatCurrency(getInfo.two),
+        'set2': this.setCount2.length === 0 ? 0 : this.setCount2,
+        'setCount3': this.setCount3.length === 0 ? '0 @ ' + this.formatCurrency(getInfo.twoOfThree) : this.setCount3 + ' @ ' + this.formatCurrency(getInfo.twoOfThree),
+        'set3': this.setCount3.length === 0 ? 0 : this.setCount3,
+        'evalCount': this.evalCount.length === 0 ? 0 : this.evalCount,
         'rating': this.tempRefereeRating,
         'matchfeeStr': this.formatCurrency(matchFees),
         'matchfees': matchFees,
@@ -351,7 +418,7 @@ export default {
       this.setCount3 = 0
       this.evalCount = 0
       this.selectedRefRating = ''
-      this.travelDistance = '0'
+      this.travelDistance = ''
       this.computeTotals()
     },
     computeTotals: function () {
@@ -389,7 +456,6 @@ export default {
       this.computeTotals()
     },
     editRef (item) {
-      console.log(item)
       this.refereeName = item.referee
       this.setCount1 = item.set1
       this.setCount2 = item.set2
@@ -400,6 +466,69 @@ export default {
       var loc = this.refereeDetails.findIndex(x => x.referee === item.referee && x.rating === item.rating)
       this.refereeDetails.splice(loc, 1)
       this.computeTotals()
+    },
+    savePdf () {
+      let pdfName = 'test'
+      var doc = new JsPDF()
+      const lineHeight = 7
+      const lineLength = 180
+      var lineStart = 20
+      doc.text('CHRVA Head Referee Report', 105, lineStart, null, null, 'center')
+      doc.setFontSize(12)
+      lineStart += 20
+      doc.text('Tournament Date: ' + this.fromDateDisp, 20, lineStart)
+      lineStart += lineHeight
+      doc.text('Playing Level: ' + this.playingLevel, 20, lineStart)
+      lineStart += lineHeight
+      doc.text('Tournament Location: ' + this.tournamentLocation, 20, lineStart)
+      lineStart += lineHeight
+      doc.text('Head Referee Name: ' + this.headRefereeName, 20, lineStart)
+      lineStart += lineHeight
+      doc.text('Referee Count: ' + this.numOfNprs, 20, lineStart)
+      lineStart += lineHeight
+      doc.text('Team Count: ' + this.teamCount, 20, lineStart)
+      lineStart += lineHeight
+      doc.text('Court Count: ' + this.numOfCourts, 20, lineStart)
+      lineStart += lineHeight * 2
+      for (var i = 0; i < this.refereeDetails.length; i++) {
+        var t = 'Referee: ' + this.refereeDetails[i].referee + ' (' + this.refereeDetails[i].rating + ') '
+        t += this.refereeDetails[i].setCount1 + ' '
+        t += this.refereeDetails[i].setCount2 + ' '
+        t += this.refereeDetails[i].setCount3 + ' '
+        t += 'Match total: ' + this.refereeDetails[i].matchfeeStr
+        doc.text(t, 20, lineStart)
+        lineStart += lineHeight
+        t = 'Travel Dist: ' + this.refereeDetails[i].travelDistance + 'm '
+        t += 'Travel Fee: ' + this.refereeDetails[i].travelFeeStr + ' '
+        t += 'Evaluation Count: ' + this.refereeDetails[i].evalCount + ' '
+        doc.text(t, 30, lineStart)
+        lineStart += lineHeight
+      }
+      doc.addPage()
+      lineStart = 20
+      doc.text('Tournament Overhead', 105, lineStart, null, null, 'center')
+      lineStart += lineHeight
+      doc.line(20, lineStart, lineLength, lineStart)
+      lineStart += lineHeight
+      doc.text('Admin Fee: ' + this.formatCurrency(this.numOfCourts * this.adminFee), 20, lineStart)
+      lineStart += lineHeight
+      doc.text('Sanction Fee: ' + this.formatCurrency(this.teamCount * this.sanctionFee), 20, lineStart)
+      lineStart += lineHeight
+      doc.text('Total Match Fees: ' + this.formatCurrency(this.matchFeeTotal), 20, lineStart)
+      lineStart += lineHeight
+      doc.text('Total Travel Fees: ' + this.formatCurrency(this.totalTravelFee), 20, lineStart)
+      lineStart += lineHeight
+      doc.text('Head Referee Fee: ' + this.formatCurrency(this.headRefFee), 20, lineStart)
+      lineStart += lineHeight
+      doc.line(20, lineStart, lineLength, lineStart)
+      lineStart += lineHeight
+      doc.text('Total Amount Due: ' + this.formatCurrency(this.cTotalDue), 105, lineStart, null, null, 'center')
+      lineStart += lineHeight
+      doc.text('Notes: ', 20, lineStart)
+      lineStart += lineHeight
+      var splitNotes = doc.splitTextToSize(this.notes, 180)
+      doc.text(splitNotes, 20, lineStart)
+      doc.save(pdfName + '.pdf')
     }
   },
   computed: {
@@ -410,14 +539,19 @@ export default {
     cTotalDue () {
       return this.cTournamentTotal + this.cOverheadTotal
     },
-    cHeadRefFee () { return this.hrFee.find(arr => arr.courts === this.numOfCourts).fee }
+    cHeadRefFee () { return this.hrFee.find(arr => arr.courts === this.numOfCourts).fee },
+    fromDateDisp () {
+      return this.fromDateVal.substr(5, 5) + '-' + this.fromDateVal.substr(0, 4)
+      // return this.fromDateVal
+      // format date, apply validations, etc. Example below. 2020-01-01
+      // return this.fromDateVal ? this.formatDate(this.fromDateVal) : '' // date.toLocaleDateString()
+    }
   },
   watch: {
     selectedRefRating (val) {
       this.tempRefereeRating = val
     },
     numOfCourts (val) {
-      console.log()
       this.headRefFee = this.hrFee.find(arr => arr.courts === val).fee
     }
   }
@@ -435,7 +569,7 @@ export default {
     text-align: center;
     border: 1px solid black;
     width: 100%;
-    margin-top: 80px;
+    margin-top: 10px;
     /*height: 160px;
     /*line-height: 50px;*/
   }
@@ -450,18 +584,6 @@ export default {
   .dFlex > div:last-child{
     width: 150px;
     text-align: left;
-    /*border: 1px solid green;/**/
-  }
-  .instructorFlex{
-    display: flex;
-  }
-  .instructorFlex > div:first-child{
-    width: 50%;
-    /*border: 1px solid red;/**/
-  }
-  .instructorFlex > div:last-child{
-    text-align: left;
-    width: 50%;
     /*border: 1px solid green;/**/
   }
   .strong {
