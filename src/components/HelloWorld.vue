@@ -295,7 +295,7 @@
       </v-flex>
     </v-layout>
     <v-layout row wrap justify-space-around mx-1>
-      <v-col class="d-flex" cols="12" text-xs-center>
+      <v-col class="d-flex" style="border: 1px solid black;" cols="12" text-xs-center>
         <v-textarea
           name="input-7-1"
           label="Notes:"
