@@ -468,7 +468,7 @@ export default {
       this.computeTotals()
     },
     savePdf () {
-      let pdfName = 'test'
+      let pdfName = 'HR_Report' + this.fromDateDisp
       var doc = new JsPDF()
       const lineHeight = 7
       const lineLength = 180
