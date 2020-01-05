@@ -114,7 +114,7 @@
           thumb-label="always"
           :max=10
           :min=0
-          label="No Refs on 3/4 Team Court"
+          label="No Refs on 3/4 Team Ct"
           hint="Indicate the number of teams without a refere on 3 or 4 team courts"
           dense
         ></v-slider>
@@ -125,7 +125,7 @@
           thumb-label="always"
           :max=10
           :min=0
-          label="No Refs on 5 Team Court"
+          label="No Refs on 5 Team Ct"
           hint="Indicate the number of teams without a refere on 5 team courts"
         ></v-slider>
       </v-flex>
@@ -345,15 +345,15 @@
         ></v-textarea>
       </v-col>
     </v-layout>
-    <v-row class="mb-1" justify="center" v-if="refereeDetails.length == numOfNprs">
-      <v-col cols="3">
+    <v-layout row wrap justify-space-around mx-1>
+      <v-flex xs4 md4>
         <v-btn
           v-on:click="savePdf"
           medium color="primary"
         >Download</v-btn>
-      </v-col>
-    </v-row>
-    <v-row class="mb-1" justify="center">
+      </v-flex>
+    </v-layout>
+    <v-row class="mb-1" xs12 justify="center">
       <v-col class="d-flex" cols="12" text-xs-center>
         <div class="textblack">
           Download this completed page and e-mail the resulting PDF to the Tournament Director and fred.mehl@chrva.org<br>
