@@ -346,7 +346,7 @@
       </v-col>
     </v-layout>
     <v-layout row wrap justify-space-around mx-1>
-      <v-flex xs4 md4>
+      <v-flex xs4 class="mt-4">
         <v-btn
           v-on:click="savePdf"
           medium color="primary"
