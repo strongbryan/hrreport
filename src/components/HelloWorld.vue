@@ -114,7 +114,7 @@
           thumb-label="always"
           :max=10
           :min=0
-          label="# Teams w/o Refs on 3/4 Team Court"
+          label="No Refs on 3/4 Team Court"
           hint="Indicate the number of teams without a refere on 3 or 4 team courts"
           dense
         ></v-slider>
@@ -125,7 +125,7 @@
           thumb-label="always"
           :max=10
           :min=0
-          label="# Teams w/o Refs on 5 Team Court"
+          label="No Refs on 5 Team Court"
           hint="Indicate the number of teams without a refere on 5 team courts"
         ></v-slider>
       </v-flex>
@@ -346,7 +346,7 @@
       </v-col>
     </v-layout>
     <v-row class="mb-1" justify="center" v-if="refereeDetails.length == numOfNprs">
-      <v-col cols="2">
+      <v-col cols="3">
         <v-btn
           v-on:click="savePdf"
           medium color="primary"
