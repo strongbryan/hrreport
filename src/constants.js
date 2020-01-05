@@ -17,6 +17,8 @@ export const APP_CONSTANTS = {
   maxTeamCount: 50,
   minNprCount: 1,
   travelRate: 0.3,
+  noRef4: 42.5,
+  noRef5: 52.5,
   hrFee: [
     { 'courts': 1, 'fee': 3 },
     { 'courts': 2, 'fee': 6 },

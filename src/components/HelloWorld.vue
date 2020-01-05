@@ -107,11 +107,35 @@
         ></v-slider>
       </v-flex>
     </v-layout>
+    <v-layout row wrap justify-space-around mx-1>
+      <v-flex xs12 md5 pt-2 mt-7>
+        <v-slider
+          v-model='noTeamRef4Count'
+          thumb-label="always"
+          :max=10
+          :min=0
+          label="# Teams w/o Refs on 3/4 Team Court"
+          hint="Indicate the number of teams without a refere on 3 or 4 team courts"
+          dense
+        ></v-slider>
+      </v-flex>
+      <v-flex xs12 md5 mt-7>
+        <v-slider
+          v-model='noTeamRef5Count'
+          thumb-label="always"
+          :max=10
+          :min=0
+          label="# Teams w/o Refs on 5 Team Court"
+          hint="Indicate the number of teams without a refere on 5 team courts"
+        ></v-slider>
+      </v-flex>
+    </v-layout>
     <v-divider light></v-divider>
     <v-row align="center">
       <v-col class="d-flex" cols="40" sm="3">
         <v-text-field
           v-model="refereeName"
+          ref="refereeName"
           label='Referee Name'
           value=''
           :counter="30"
@@ -213,22 +237,38 @@
     </v-row>
 
     <v-layout row wrap justify-space-around mx-1>
-      <v-flex xs12 md3>
+      <v-flex xs12 md4>
         <hr>
-        <div class="strong">Tournament Overhead</div>
+        <div class="strong center">Tournament Overhead</div>
         <hr>
       </v-flex>
     </v-layout>
     <v-layout row wrap justify-space-around mx-1>
-      <v-flex xs4 md3>
+      <v-flex xs4 md4>
         <div class="dFlex">
-          <div>Admin Fee: {{ numOfCourts }} Cts * {{ formatCurrency(adminFee) }}:</div>
+          <div>No Ref (5 Teams): {{ noTeamRef5Count }} * {{ formatCurrency(noRef5) }}:</div>
+          <div>{{ formatCurrency(noTeamRef5Count * noRef5) }}</div>
+        </div>
+      </v-flex>
+    </v-layout>
+    <v-layout row wrap justify-space-around mx-1>
+      <v-flex xs4 md4>
+        <div class="dFlex">
+          <div>No Ref (3/4 Teams): {{ noTeamRef4Count }} * {{ formatCurrency(noRef4) }}:</div>
+          <div>{{ formatCurrency(noTeamRef4Count * noRef4) }}</div>
+        </div>
+      </v-flex>
+    </v-layout>
+    <v-layout row wrap justify-space-around mx-1>
+      <v-flex xs4 md4>
+        <div class="dFlex">
+          <div>Admin Fee: {{ numOfCourts }} Courts * {{ adminFee }}:</div>
           <div>{{ formatCurrency(numOfCourts * adminFee) }}</div>
         </div>
       </v-flex>
     </v-layout>
     <v-layout row wrap justify-space-around mx-1>
-      <v-flex xs4 md3>
+      <v-flex xs4 md4>
         <div class="dFlex">
           <div>Sanction Fee: {{ teamCount }} Teams * {{ sanctionFee }}:</div>
           <div>{{ formatCurrency(teamCount * sanctionFee) }}</div>
@@ -236,12 +276,12 @@
       </v-flex>
     </v-layout>
     <v-layout row wrap justify-space-around mx-1>
-      <v-flex xs12 md3>
+      <v-flex xs12 md4>
         <hr>
       </v-flex>
     </v-layout>
     <v-layout row wrap justify-space-around mx-1>
-      <v-flex xs4 md3>
+      <v-flex xs4 md4>
         <div class="dFlex strong">
           <div>Tournament Overhead Total:</div>
           <div>{{ formatCurrency(cOverheadTotal) }}</div>
@@ -250,15 +290,15 @@
     </v-layout>
     <br>
     <v-layout row wrap justify-space-around mx-1>
-      <v-flex xs12 md3>
+      <v-flex xs12 md4>
         <hr>
-        <div class="strong">Tournament Fees</div>
+        <div class="strong center">Tournament Fees</div>
         <hr>
       </v-flex>
     </v-layout>
 
     <v-layout row wrap justify-space-around mx-1>
-      <v-flex xs4 md3>
+      <v-flex xs4 md4>
         <div class="dFlex">
           <div>Total Match Fees: </div>
           <div>{{ formatCurrency(matchFeeTotal) }}</div>
@@ -266,7 +306,7 @@
       </v-flex>
     </v-layout>
     <v-layout row wrap justify-space-around mx-1>
-      <v-flex xs4 md3>
+      <v-flex xs4 md4>
         <div class="dFlex">
           <div>Total Travel Fees: </div>
           <div>{{ formatCurrency(totalTravelFee) }}</div>
@@ -274,7 +314,7 @@
       </v-flex>
     </v-layout>
     <v-layout row wrap justify-space-around mx-1>
-      <v-flex xs4 md3>
+      <v-flex xs4 md4>
         <div class="dFlex">
           <div>Head Referee Fee: </div>
           <div>{{ formatCurrency(headRefFee) }}</div>
@@ -282,12 +322,12 @@
       </v-flex>
     </v-layout>
     <v-layout row wrap justify-space-around mx-1>
-      <v-flex xs12 md3>
+      <v-flex xs12 md4>
         <hr>
       </v-flex>
     </v-layout>
     <v-layout row wrap justify-space-around mx-1>
-      <v-flex xs4 md3>
+      <v-flex xs4 md4>
         <div class="dFlex strong">
           <div>Total Amount Due: </div>
           <div>{{ formatCurrency(cTotalDue) }}</div>
@@ -295,7 +335,7 @@
       </v-flex>
     </v-layout>
     <v-layout row wrap justify-space-around mx-1>
-      <v-col class="d-flex" style="border: 1px solid black;" cols="12" text-xs-center>
+      <v-col class="d-flex mt-5" style="border: 1px solid black;" cols="12" text-xs-center>
         <v-textarea
           name="input-7-1"
           label="Notes:"
@@ -337,6 +377,8 @@ export default {
     matchFeeTotal: 0,
     totalTravelFee: 0,
     teamCount: 8,
+    noTeamRef4Count: 0,
+    noTeamRef5Count: 0,
     maxTeamCount: APP_CONSTANTS.maxTeamCount,
     tourneyType: APP_CONSTANTS.defTournamentType,
     sanctionFee: APP_CONSTANTS.defSanctionFee,
@@ -348,6 +390,8 @@ export default {
     maxNprCount: APP_CONSTANTS.maxNprCount,
     numOfNprs: APP_CONSTANTS.defNprCount,
     minCourtCount: APP_CONSTANTS.minCourtCount,
+    noRef5: APP_CONSTANTS.noRef5,
+    noRef4: APP_CONSTANTS.noRef4,
     playingLevel: '',
     notes: '',
     tournamentLocation: '',
@@ -420,6 +464,7 @@ export default {
       this.selectedRefRating = ''
       this.travelDistance = ''
       this.computeTotals()
+      this.$refs.refereeName.focus()
     },
     computeTotals: function () {
       this.matchFeeTotal = 0
@@ -489,6 +534,10 @@ export default {
       doc.text('Team Count: ' + this.teamCount, 20, lineStart)
       lineStart += lineHeight
       doc.text('Court Count: ' + this.numOfCourts, 20, lineStart)
+      lineStart += lineHeight
+      doc.text('Teams with no referee on a 5 team court: ' + this.noTeamRef5Count, 20, lineStart)
+      lineStart += lineHeight
+      doc.text('Teams with no referee on a 3 or 4 team court: ' + this.noTeamRef4Count, 20, lineStart)
       lineStart += lineHeight * 2
       for (var i = 0; i < this.refereeDetails.length; i++) {
         var t = 'Referee: ' + this.refereeDetails[i].referee + ' (' + this.refereeDetails[i].rating + ') '
@@ -514,6 +563,10 @@ export default {
       lineStart += lineHeight
       doc.text('Sanction Fee: ' + this.formatCurrency(this.teamCount * this.sanctionFee), 20, lineStart)
       lineStart += lineHeight
+      doc.text('Teams with no referee on a 5 team court: ' + this.formatCurrency(this.noRef5 * this.noTeamRef5Count), 20, lineStart)
+      lineStart += lineHeight
+      doc.text('Teams with no referee on a 3 or 4 team court: ' + this.formatCurrency(this.noRef4 * this.noTeamRef4Count), 20, lineStart)
+      lineStart += lineHeight
       doc.text('Total Match Fees: ' + this.formatCurrency(this.matchFeeTotal), 20, lineStart)
       lineStart += lineHeight
       doc.text('Total Travel Fees: ' + this.formatCurrency(this.totalTravelFee), 20, lineStart)
@@ -532,7 +585,10 @@ export default {
     }
   },
   computed: {
-    cOverheadTotal () { return this.numOfCourts * this.adminFee + this.teamCount * this.sanctionFee },
+    cOverheadTotal () {
+      return this.numOfCourts * this.adminFee + this.teamCount * this.sanctionFee +
+        this.noTeamRef5Count * this.noRef5 + this.noTeamRef4Count * this.noRef4
+    },
     cTournamentTotal () {
       return this.matchFeeTotal + this.totalTravelFee + this.headRefFee
     },
@@ -575,10 +631,12 @@ export default {
   }
   .dFlex{
     display: flex;
+    width: 400px;
+    /*border: 1px solid blue;/**/
   }
   .dFlex > div:first-child{
     white-space: nowrap;
-    width: 450px;
+    width: 250px;/**/
     /*border: 1px solid red;/**/
   }
   .dFlex > div:last-child{
@@ -588,5 +646,8 @@ export default {
   }
   .strong {
     font-weight: bold;
+  }
+  .center{
+    text-align: center
   }
 </style>
