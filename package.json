@@ -41,7 +41,10 @@
       "plugin:vue/essential",
       "@vue/standard"
     ],
-    "rules": {},
+    "rules": {
+      "no-unused-vars": 0,
+      "func-call-spacing": "off"
+    },
     "parserOptions": {
       "parser": "babel-eslint"
     }

@@ -36,7 +36,6 @@
           <v-date-picker
             locale="en-in"
             :min="minDate"
-            :max="maxDate"
             v-model="fromDateVal"
             no-title
             @input="fromDateMenu = false"
@@ -345,14 +344,18 @@
         ></v-textarea>
       </v-col>
     </v-layout>
-    <v-layout row wrap justify-space-around mx-1>
-      <v-flex xs4 class="mt-4">
-        <v-btn
-          v-on:click="savePdf"
-          medium color="primary"
-        >Download</v-btn>
-      </v-flex>
-    </v-layout>
+    <v-row class="mb-1 mt-4" justify="center" v-if="refereeDetails.length == numOfNprs">
+      <v-btn
+        v-on:click="savePdf"
+        medium color="primary"
+      >Download</v-btn>
+    </v-row>
+    <!--v-row class="mb-1 mt-4" justify="center">
+      <v-btn
+        v-on:click="test"
+        medium color="primary"
+      >Navigate</v-btn>
+    </v-row -->
     <v-row class="mb-1" xs12 justify="center">
       <v-col class="d-flex" cols="12" text-xs-center>
         <div class="textblack">
@@ -361,17 +364,28 @@
         </div>
       </v-col>
     </v-row>
+    <v-row class="mb-1" xs12 justify="center">
+      <v-col class="d-flex" cols="12" text-xs-center>
+        <div class="textblack">
+          If the tournament director gives you a check, mail it to<br>
+          Treasurer CHRVA-AAVO<br>
+          4650 Alcott Way #404<br>
+          Owings Mills, MD 21117
+        </div>
+      </v-col>
+    </v-row>
   </v-container>
 </template>
 
 <script>
-import { APP_CONSTANTS } from '../constants'
+import { APP_CONSTANTS, funcCreatePdf } from '../constants'
 import JsPDF from 'jspdf'
 export default {
   name: 'HelloWorld',
 
   data: () => ({
     adminFee: APP_CONSTANTS.adminFee,
+    createPdf: funcCreatePdf,
     arrayRefereeCertifications: APP_CONSTANTS.arrayRefereeCertifications,
     overheadTotal: 0,
     matchFeeTotal: 0,
@@ -420,9 +434,8 @@ export default {
     refereeDetails: [],
     headRefFee: 6, // TODO this.hrFee.find(arr => arr.courts === this.numOfCourts).fee
     fromDateMenu: false,
-    fromDateVal: new Date().toISOString().split('T')[0], // .toLocaleDateString('en-US'), // '2020-01-01',  //'en-US'
-    minDate: '2019-07-04',
-    maxDate: '2020-08-30'
+    fromDateVal: APP_CONSTANTS.currentDate,
+    minDate: '2019-07-04'
   }),
   methods: {
     saveRefereeRow: function (event) {
@@ -512,76 +525,37 @@ export default {
       this.refereeDetails.splice(loc, 1)
       this.computeTotals()
     },
+    /* test () {
+      console.log('nav')
+      this.$router.push('about')
+    }, */
     savePdf () {
-      let pdfName = 'HR_Report' + this.fromDateDisp
-      var doc = new JsPDF()
-      const lineHeight = 7
-      const lineLength = 180
-      var lineStart = 20
-      doc.text('CHRVA Head Referee Report', 105, lineStart, null, null, 'center')
-      doc.setFontSize(12)
-      lineStart += 20
-      doc.text('Tournament Date: ' + this.fromDateDisp, 20, lineStart)
-      lineStart += lineHeight
-      doc.text('Playing Level: ' + this.playingLevel, 20, lineStart)
-      lineStart += lineHeight
-      doc.text('Tournament Location: ' + this.tournamentLocation, 20, lineStart)
-      lineStart += lineHeight
-      doc.text('Head Referee Name: ' + this.headRefereeName, 20, lineStart)
-      lineStart += lineHeight
-      doc.text('Referee Count: ' + this.numOfNprs, 20, lineStart)
-      lineStart += lineHeight
-      doc.text('Team Count: ' + this.teamCount, 20, lineStart)
-      lineStart += lineHeight
-      doc.text('Court Count: ' + this.numOfCourts, 20, lineStart)
-      lineStart += lineHeight
-      doc.text('Teams with no referee on a 5 team court: ' + this.noTeamRef5Count, 20, lineStart)
-      lineStart += lineHeight
-      doc.text('Teams with no referee on a 3 or 4 team court: ' + this.noTeamRef4Count, 20, lineStart)
-      lineStart += lineHeight * 2
-      for (var i = 0; i < this.refereeDetails.length; i++) {
-        var t = 'Referee: ' + this.refereeDetails[i].referee + ' (' + this.refereeDetails[i].rating + ') '
-        t += this.refereeDetails[i].setCount1 + ' '
-        t += this.refereeDetails[i].setCount2 + ' '
-        t += this.refereeDetails[i].setCount3 + ' '
-        t += 'Match total: ' + this.refereeDetails[i].matchfeeStr
-        doc.text(t, 20, lineStart)
-        lineStart += lineHeight
-        t = 'Travel Dist: ' + this.refereeDetails[i].travelDistance + 'm '
-        t += 'Travel Fee: ' + this.refereeDetails[i].travelFeeStr + ' '
-        t += 'Evaluation Count: ' + this.refereeDetails[i].evalCount + ' '
-        doc.text(t, 30, lineStart)
-        lineStart += lineHeight
-      }
-      doc.addPage()
-      lineStart = 20
-      doc.text('Tournament Overhead', 105, lineStart, null, null, 'center')
-      lineStart += lineHeight
-      doc.line(20, lineStart, lineLength, lineStart)
-      lineStart += lineHeight
-      doc.text('Admin Fee: ' + this.formatCurrency(this.numOfCourts * this.adminFee), 20, lineStart)
-      lineStart += lineHeight
-      doc.text('Sanction Fee: ' + this.formatCurrency(this.teamCount * this.sanctionFee), 20, lineStart)
-      lineStart += lineHeight
-      doc.text('Teams with no referee on a 5 team court: ' + this.formatCurrency(this.noRef5 * this.noTeamRef5Count), 20, lineStart)
-      lineStart += lineHeight
-      doc.text('Teams with no referee on a 3 or 4 team court: ' + this.formatCurrency(this.noRef4 * this.noTeamRef4Count), 20, lineStart)
-      lineStart += lineHeight
-      doc.text('Total Match Fees: ' + this.formatCurrency(this.matchFeeTotal), 20, lineStart)
-      lineStart += lineHeight
-      doc.text('Total Travel Fees: ' + this.formatCurrency(this.totalTravelFee), 20, lineStart)
-      lineStart += lineHeight
-      doc.text('Head Referee Fee: ' + this.formatCurrency(this.headRefFee), 20, lineStart)
-      lineStart += lineHeight
-      doc.line(20, lineStart, lineLength, lineStart)
-      lineStart += lineHeight
-      doc.text('Total Amount Due: ' + this.formatCurrency(this.cTotalDue), 105, lineStart, null, null, 'center')
-      lineStart += lineHeight
-      doc.text('Notes: ', 20, lineStart)
-      lineStart += lineHeight
-      var splitNotes = doc.splitTextToSize(this.notes, 180)
-      doc.text(splitNotes, 20, lineStart)
-      doc.save(pdfName + '.pdf')
+      var doc = new JsPDF({
+        format: 'letter'
+        // , orientation: 'l'
+      })
+      this.createPdf(doc, {
+        title: 'CHRVA Head Referee Report',
+        tournamentDate: this.fromDateDisp,
+        playlingLevel: this.playingLevel,
+        tournamentLocation: this.tournamentLocation,
+        headRefereeName: this.headRefereeName,
+        numOfNprs: this.numOfNprs,
+        teamCount: this.teamCount,
+        numOfCourts: this.numOfCourts,
+        noTeamRef5Count: this.noTeamRef5Count,
+        noTeamRef4Count: this.noTeamRef4Count,
+        refereeDetails: this.refereeDetails,
+        adminFee: this.formatCurrency(this.numOfCourts * this.adminFee),
+        sanctionFee: this.formatCurrency(this.teamCount * this.sanctionFee),
+        noRef5: this.formatCurrency(this.noRef5 * this.noTeamRef5Count),
+        noRef4: this.formatCurrency(this.noRef4 * this.noTeamRef4Count),
+        matchFeeTotal: this.formatCurrency(this.matchFeeTotal),
+        totalTravelFee: this.formatCurrency(this.totalTravelFee),
+        headRefFee: this.formatCurrency(this.headRefFee),
+        notes: this.notes,
+        totalDue: this.formatCurrency(this.cTotalDue)
+      })
     }
   },
   computed: {
@@ -598,9 +572,6 @@ export default {
     cHeadRefFee () { return this.hrFee.find(arr => arr.courts === this.numOfCourts).fee },
     fromDateDisp () {
       return this.fromDateVal.substr(5, 5) + '-' + this.fromDateVal.substr(0, 4)
-      // return this.fromDateVal
-      // format date, apply validations, etc. Example below. 2020-01-01
-      // return this.fromDateVal ? this.formatDate(this.fromDateVal) : '' // date.toLocaleDateString()
     }
   },
   watch: {
@@ -612,6 +583,7 @@ export default {
     }
   }
 }
+
 </script>
 
 <style>

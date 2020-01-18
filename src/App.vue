@@ -30,20 +30,20 @@
     </v-app-bar-->
 
     <v-content>
-      <HelloWorld/>
+      <router-view></router-view>
+      <!--HelloWorld/-->
     </v-content>
   </v-app>
 </template>
 
 <script>
 import HelloWorld from './components/HelloWorld'
-// import test from './components/test'
 
 export default {
   name: 'App',
 
   components: {
-    HelloWorld // ,
+    // HelloWorld // ,
     // test
   },
 
