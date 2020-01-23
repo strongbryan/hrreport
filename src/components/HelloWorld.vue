@@ -243,33 +243,33 @@
       </v-flex>
     </v-layout>
     <v-layout row wrap justify-space-around mx-1>
-      <v-flex xs4 md4>
+      <v-flex xs12 md4>
         <div class="dFlex">
-          <div>No Ref (5 Teams): {{ noTeamRef5Count }} * {{ formatCurrency(noRef5) }}:</div>
+          <div>No Ref (5 Teams): {{ noTeamRef5Count }} * {{ formatCurrency(noRef5) }}: </div>
           <div>{{ formatCurrency(noTeamRef5Count * noRef5) }}</div>
         </div>
       </v-flex>
     </v-layout>
     <v-layout row wrap justify-space-around mx-1>
-      <v-flex xs4 md4>
+      <v-flex xs12 md4>
         <div class="dFlex">
-          <div>No Ref (3/4 Teams): {{ noTeamRef4Count }} * {{ formatCurrency(noRef4) }}:</div>
+          <div>No Ref (3/4 Teams): {{ noTeamRef4Count }} * {{ formatCurrency(noRef4) }}: </div>
           <div>{{ formatCurrency(noTeamRef4Count * noRef4) }}</div>
         </div>
       </v-flex>
     </v-layout>
     <v-layout row wrap justify-space-around mx-1>
-      <v-flex xs4 md4>
+      <v-flex xs12 md4>
         <div class="dFlex">
-          <div>Admin Fee: {{ numOfCourts }} Courts * {{ adminFee }}:</div>
+          <div>Admin Fee: {{ numOfCourts }} Courts * {{ adminFee }}: </div>
           <div>{{ formatCurrency(numOfCourts * adminFee) }}</div>
         </div>
       </v-flex>
     </v-layout>
     <v-layout row wrap justify-space-around mx-1>
-      <v-flex xs4 md4>
+      <v-flex xs12 md4>
         <div class="dFlex">
-          <div>Sanction Fee: {{ teamCount }} Teams * {{ sanctionFee }}:</div>
+          <div>Sanction Fee: {{ teamCount }} Teams * {{ sanctionFee }}: </div>
           <div>{{ formatCurrency(teamCount * sanctionFee) }}</div>
         </div>
       </v-flex>
@@ -280,9 +280,9 @@
       </v-flex>
     </v-layout>
     <v-layout row wrap justify-space-around mx-1>
-      <v-flex xs4 md4>
+      <v-flex xs12 md4>
         <div class="dFlex strong">
-          <div>Tournament Overhead Total:</div>
+          <div>Tournament Overhead Total: </div>
           <div>{{ formatCurrency(cOverheadTotal) }}</div>
         </div>
       </v-flex>
@@ -297,7 +297,7 @@
     </v-layout>
 
     <v-layout row wrap justify-space-around mx-1>
-      <v-flex xs4 md4>
+      <v-flex xs12 md4>
         <div class="dFlex">
           <div>Total Match Fees: </div>
           <div>{{ formatCurrency(matchFeeTotal) }}</div>
@@ -305,7 +305,7 @@
       </v-flex>
     </v-layout>
     <v-layout row wrap justify-space-around mx-1>
-      <v-flex xs4 md4>
+      <v-flex xs12 md4>
         <div class="dFlex">
           <div>Total Travel Fees: </div>
           <div>{{ formatCurrency(totalTravelFee) }}</div>
@@ -313,7 +313,7 @@
       </v-flex>
     </v-layout>
     <v-layout row wrap justify-space-around mx-1>
-      <v-flex xs4 md4>
+      <v-flex xs12 md4>
         <div class="dFlex">
           <div>Head Referee Fee: </div>
           <div>{{ formatCurrency(headRefFee) }}</div>
@@ -326,7 +326,7 @@
       </v-flex>
     </v-layout>
     <v-layout row wrap justify-space-around mx-1>
-      <v-flex xs4 md4>
+      <v-flex xs12 md4>
         <div class="dFlex strong">
           <div>Total Amount Due: </div>
           <div>{{ formatCurrency(cTotalDue) }}</div>
@@ -612,7 +612,7 @@ export default {
     /*border: 1px solid red;/**/
   }
   .dFlex > div:last-child{
-    width: 150px;
+    width: 125px;
     text-align: left;
     /*border: 1px solid green;/**/
   }
