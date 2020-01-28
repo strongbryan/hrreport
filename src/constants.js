@@ -23,7 +23,7 @@ export const APP_CONSTANTS = {
   hrFee: [
     { 'courts': 1, 'fee': 3 },
     { 'courts': 2, 'fee': 6 },
-    { 'courts': 3, 'fee': 7 },
+    { 'courts': 3, 'fee': 9 },
     { 'courts': 4, 'fee': 13 },
     { 'courts': 5, 'fee': 17 },
     { 'courts': 6, 'fee': 21 },
