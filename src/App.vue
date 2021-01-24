@@ -29,10 +29,10 @@
       </v-btn>
     </v-app-bar-->
 
-    <v-content>
+    <v-main>
       <router-view></router-view>
       <!--HelloWorld/-->
-    </v-content>
+    </v-main>
   </v-app>
 </template>
 

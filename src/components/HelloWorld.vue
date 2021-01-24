@@ -131,7 +131,7 @@
     </v-layout>
     <v-divider light></v-divider>
     <v-row align="center">
-      <v-col class="d-flex" cols="40" sm="3">
+      <v-col class="d-flex" cols="35" sm="3">
         <v-text-field
           v-model="refereeName"
           ref="refereeName"
@@ -142,7 +142,7 @@
           dense
         ></v-text-field>
       </v-col>
-      <v-col class="d-flex" cols="40" sm="3">
+      <v-col class="d-flex" cols="35" sm="2">
         <v-select
           v-model='selectedRefRating'
           :items="arrayRefereeCertifications"
@@ -153,7 +153,7 @@
           dense
         ></v-select>
       </v-col>
-      <v-col class="d-flex" cols="40" sm="3">
+      <v-col class="d-flex" cols="35" sm="2">
         <v-text-field
           v-model='evalCount'
           label='Evaluations'
@@ -161,7 +161,7 @@
           dense
         ></v-text-field>
       </v-col>
-      <v-col class="d-flex" cols="40" sm="3">
+      <v-col class="d-flex" cols="25" sm="2">
         <v-text-field
           v-model='travelDistance'
           label='Travel Distance'
@@ -169,9 +169,19 @@
           dense
         ></v-text-field>
       </v-col>
+      <v-col class="d-flex" cols="35" sm="3">
+        <v-checkbox
+          v-model='workedAllDay'
+          label='Full day assignment'
+          hint='Check the box if the referee worked a full day'
+          dense
+        ></v-checkbox>
+      </v-col>
     </v-row>
     <v-row align="center">
-      <v-col class="d-flex" cols="40" sm="4">
+      <v-col class="d-flex" cols="30" sm="1">
+      </v-col>
+      <v-col class="d-flex" cols="30" sm="3">
         <v-text-field
           v-model="setCount1"
           label='Number of 1 set matches'
@@ -180,7 +190,7 @@
           dense
         ></v-text-field>
       </v-col>
-      <v-col class="d-flex" cols="40" sm="4">
+      <v-col class="d-flex" cols="30" sm="3">
         <v-text-field
           v-model="setCount2"
           label='Number of 2 set matches'
@@ -189,7 +199,7 @@
           dense
         ></v-text-field>
       </v-col>
-      <v-col class="d-flex" cols="40" sm="4">
+      <v-col class="d-flex" cols="30" sm="3">
         <v-text-field
           v-model="setCount3"
           label='Number of 2/3, 3 set matches'
@@ -197,6 +207,8 @@
           hint='Num. 2 out of 3 matches worked'
           dense
         ></v-text-field>
+      </v-col>
+      <v-col class="d-flex" cols="30" sm="2">
       </v-col>
     </v-row>
     <v-row class="mb-1" justify="center">
@@ -232,6 +244,11 @@
     <v-row class="mb-1" justify="center" v-if="refereeDetails.length > numOfNprs">
       <v-col cols="12" text-xs-center>
         <div class="textred">TOO MANY REFEREES REPORTED!</div>
+      </v-col>
+    </v-row>
+    <v-row class="mb-1" justify="center" v-if="minimumMatchFeeApplied">
+      <v-col cols="12" text-xs-center>
+        <div class="textred">* shows this referee will be paid the required minimum!</div>
       </v-col>
     </v-row>
 
@@ -397,7 +414,6 @@ export default {
     tourneyType: APP_CONSTANTS.defTournamentType,
     sanctionFee: APP_CONSTANTS.defSanctionFee,
     numOfCourts: APP_CONSTANTS.defCourt,
-    // headRefFee: 0,
     hrFee: APP_CONSTANTS.hrFee,
     maxCourtCount: APP_CONSTANTS.maxCourtCount,
     minNprCount: APP_CONSTANTS.minNprCount,
@@ -416,7 +432,9 @@ export default {
     setCount2: 0,
     setCount3: 0,
     evalCount: 0,
-    travelDistance: '',
+    travelDistance: 0,
+    workedAllDay: true,
+    minimumMatchFeeApplied: false,
     headers: [
       { text: 'Referee', align: 'left', sortable: false, value: 'referee' },
       { text: 'Rating', align: 'center', sortable: false, value: 'rating' },
@@ -424,6 +442,7 @@ export default {
       { text: '1 Set', align: 'center', sortable: false, value: 'setCount1' },
       { text: '2 Set', align: 'center', sortable: false, value: 'setCount2' },
       { text: '2/3, 3', align: 'center', sortable: false, value: 'setCount3' },
+      { text: 'Full Day', align: 'center', sortable: false, value: 'wfDay' },
       { text: 'Match Fees', align: 'left', sortable: false, value: 'matchfeeStr' },
       { text: 'Travel Fee', align: 'left', sortable: false, value: 'travelFeeStr' },
       { text: 'Actions', align: 'center', sortable: false, value: 'action' }
@@ -452,6 +471,13 @@ export default {
       }
       const getInfo = this.arrayRefereeCertifications.find(type => type.type === this.tempRefereeRating)
       var matchFees = this.setCount1 * getInfo.one + this.setCount2 * getInfo.two + this.setCount3 * getInfo.twoOfThree || 0
+      var minApplied = false
+      if (this.workedAllDay && matchFees < getInfo.minimum) {
+        matchFees = getInfo.minimum
+        minApplied = true
+      }
+      var matchfeeStr = this.formatCurrency(matchFees)
+      if (minApplied) matchfeeStr += ' *'
       var t = {
         'referee': this.refereeName,
         'setCount1': this.setCount1.length === 0 ? '0 @ ' + this.formatCurrency(getInfo.one) : this.setCount1 + ' @ ' + this.formatCurrency(getInfo.one),
@@ -462,9 +488,10 @@ export default {
         'set3': this.setCount3.length === 0 ? 0 : this.setCount3,
         'evalCount': this.evalCount.length === 0 ? 0 : this.evalCount,
         'rating': this.tempRefereeRating,
-        'matchfeeStr': this.formatCurrency(matchFees),
+        'matchfeeStr': matchfeeStr,
         'matchfees': matchFees,
         'travelDistance': this.travelDistance,
+        'wfDay': this.workedAllDay === true ? 'Yes' : 'No',
         'travelFeeStr': this.formatCurrency(this.travelDistance * APP_CONSTANTS.travelRate),
         'travelFee': this.travelDistance * APP_CONSTANTS.travelRate
       }
@@ -475,14 +502,17 @@ export default {
       this.setCount3 = 0
       this.evalCount = 0
       this.selectedRefRating = ''
-      this.travelDistance = ''
+      this.travelDistance = 0
+      this.workedAllDay = true
       this.computeTotals()
       this.$refs.refereeName.focus()
     },
     computeTotals: function () {
       this.matchFeeTotal = 0
       this.totalTravelFee = 0
+      this.minimumMatchFeeApplied = false
       for (var i = 0; i < this.refereeDetails.length; i++) {
+        if (this.refereeDetails[i].matchfeeStr.indexOf('*') >= 0) this.minimumMatchFeeApplied = true
         this.matchFeeTotal += this.refereeDetails[i].matchfees
         this.totalTravelFee += this.refereeDetails[i].travelFee
       }
@@ -521,6 +551,8 @@ export default {
       this.evalCount = item.evalCount
       this.selectedRefRating = item.rating
       this.travelDistance = item.travelDistance
+      this.workedAllDay = true
+      if (item.wfDay === 'No') this.workedAllDay = false
       var loc = this.refereeDetails.findIndex(x => x.referee === item.referee && x.rating === item.rating)
       this.refereeDetails.splice(loc, 1)
       this.computeTotals()
@@ -554,7 +586,8 @@ export default {
         totalTravelFee: this.formatCurrency(this.totalTravelFee),
         headRefFee: this.formatCurrency(this.headRefFee),
         notes: this.notes,
-        totalDue: this.formatCurrency(this.cTotalDue)
+        totalDue: this.formatCurrency(this.cTotalDue),
+        minimumMatchFeeApplied: this.minimumMatchFeeApplied
       })
     }
   },
@@ -592,6 +625,9 @@ export default {
     text-align: center;
     border: 1px solid red;
     width: 100%
+  }
+  .redNoBorder{
+    color: red;
   }
   .textblack{
     text-align: center;

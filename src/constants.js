@@ -2,10 +2,10 @@ export const APP_CONSTANTS = {
   currentDate: (new Date()).getFullYear() + '-' + (new Date().getMonth() + 1) + '-' + new Date().getDate(),
   adminFee: 30,
   arrayRefereeCertifications: [
-    { 'type': 'N', 'display': 'National', 'one': 15.5, 'two': 31.5, 'twoOfThree': 36.5 },
-    { 'type': 'JN', 'display': 'Junior National', 'one': 15.5, 'two': 31.5, 'twoOfThree': 36.5 },
-    { 'type': 'R', 'display': 'Regional', 'one': 15.5, 'two': 30.5, 'twoOfThree': 35.5 },
-    { 'type': 'P', 'display': 'Provisional', 'one': 15.5, 'two': 25.5, 'twoOfThree': 30.5 }
+    { 'type': 'N', 'display': 'National', 'one': 15.5, 'two': 31.5, 'twoOfThree': 36.5, 'minimum': 170 },
+    { 'type': 'JN', 'display': 'Junior National', 'one': 15.5, 'two': 31.5, 'twoOfThree': 36.5, 'minimum': 170 },
+    { 'type': 'R', 'display': 'Regional', 'one': 15.5, 'two': 30.5, 'twoOfThree': 35.5, 'minimum': 165 },
+    { 'type': 'P', 'display': 'Provisional', 'one': 15.5, 'two': 25.5, 'twoOfThree': 30.5, 'minimum': 140 }
   ],
   defCourt: 2,
   defNprCount: 2,
@@ -65,9 +65,13 @@ export function funcCreatePdf (doc, args) {
   doc.text('Court Count: ' + args.numOfCourts, 20, lineStart)
   checkLine (lineHeight)
   doc.text('Teams with no referee on a 5 team court: ' + args.noTeamRef5Count, 20, lineStart)
-  checkLine (lineHeight * 2)
-  doc.text('Teams with no referee on a 3 or 4 team court: ' + args.noTeamRef4Count, 20, lineStart)
   checkLine (lineHeight)
+  doc.text('Teams with no referee on a 3 or 4 team court: ' + args.noTeamRef4Count, 20, lineStart)
+  checkLine (lineHeight * 2)
+  if (args.minimumMatchFeeApplied) {
+    doc.text('Referees with an asterisk next to match pay are getting the minimum amount.', 20, lineStart)
+    checkLine (lineHeight * 2)
+  }
   for (var i = 0; i < args.refereeDetails.length; i++) {
     var t = 'Referee: ' + args.refereeDetails[i].referee + ' (' + args.refereeDetails[i].rating + ') '
     t += args.refereeDetails[i].setCount1 + ' '
