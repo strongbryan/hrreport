@@ -376,7 +376,7 @@
     <v-row class="mb-1" xs12 justify="center">
       <v-col class="d-flex" cols="12" text-xs-center>
         <div class="textblack">
-          Download this completed page and e-mail the resulting PDF to the Tournament Director and fred.mehl@chrva.org<br>
+          Download this completed page and e-mail the resulting PDF to the Tournament Director and fred.mehl@chrvavb.org<br>
           Note: A Download button will appear when the number of referees entered equals the Referee Count from above.
         </div>
       </v-col>
