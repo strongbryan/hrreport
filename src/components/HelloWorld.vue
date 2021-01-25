@@ -367,12 +367,6 @@
         medium color="primary"
       >Download</v-btn>
     </v-row>
-    <!--v-row class="mb-1 mt-4" justify="center">
-      <v-btn
-        v-on:click="test"
-        medium color="primary"
-      >Navigate</v-btn>
-    </v-row -->
     <v-row class="mb-1" xs12 justify="center">
       <v-col class="d-flex" cols="12" text-xs-center>
         <div class="textblack">
