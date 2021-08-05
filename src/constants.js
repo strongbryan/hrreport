@@ -2,10 +2,10 @@ export const APP_CONSTANTS = {
   currentDate: (new Date()).getFullYear() + '-' + (new Date().getMonth() + 1) + '-' + new Date().getDate(),
   adminFee: 30,
   arrayRefereeCertifications: [
-    { 'type': 'N', 'display': 'National', 'one': 15.5, 'two': 31.5, 'twoOfThree': 36.5, 'minimum': 170 },
-    { 'type': 'JN', 'display': 'Junior National', 'one': 15.5, 'two': 31.5, 'twoOfThree': 36.5, 'minimum': 170 },
-    { 'type': 'R', 'display': 'Regional', 'one': 15.5, 'two': 30.5, 'twoOfThree': 35.5, 'minimum': 165 },
-    { 'type': 'P', 'display': 'Provisional', 'one': 15.5, 'two': 25.5, 'twoOfThree': 30.5, 'minimum': 140 }
+    { 'type': 'N', 'display': 'National', 'one': 16.5, 'two': 32.5, 'twoOfThree': 37.5, 'minimum': 177.5 },
+    { 'type': 'JN', 'display': 'Junior National', 'one': 16.5, 'two': 32.5, 'twoOfThree': 37.5, 'minimum': 177.5 },
+    { 'type': 'R', 'display': 'Regional', 'one': 16.0, 'two': 31.0, 'twoOfThree': 36.0, 'minimum': 170 },
+    { 'type': 'P', 'display': 'Provisional', 'one': 16.0, 'two': 26.0, 'twoOfThree': 31.0, 'minimum': 140 }
   ],
   defCourt: 2,
   defNprCount: 2,
