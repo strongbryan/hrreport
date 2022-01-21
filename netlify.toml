@@ -1,0 +1,4 @@
+[context.production]
+  publish = "dist"
+  command = "vue-cli-service build"
+  environment = { ACCESS_TOKEN = "super secret", NODE_VERSION = "16.13.2" }
