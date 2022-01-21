@@ -1,6 +1,7 @@
 export const APP_CONSTANTS = {
   currentDate: (new Date()).getFullYear() + '-' + (new Date().getMonth() + 1) + '-' + new Date().getDate(),
   adminFee: 30,
+  boogers: 20,
   arrayRefereeCertifications: [
     { 'type': 'N', 'display': 'National', 'one': 16.5, 'two': 32.5, 'twoOfThree': 37.5, 'minimum': 177.5 },
     { 'type': 'JN', 'display': 'Junior National', 'one': 16.5, 'two': 32.5, 'twoOfThree': 37.5, 'minimum': 177.5 },
