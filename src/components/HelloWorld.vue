@@ -370,7 +370,7 @@
     <v-row class="mb-1" xs12 justify="center">
       <v-col class="d-flex" cols="12" text-xs-center>
         <div class="textblack">
-          Download this completed page and e-mail the resulting PDF to the Tournament Director and fred.mehl@chrvavb.org<br>
+          Download this completed page and e-mail the resulting PDF to the Tournament Director and reiko.allred@chrvavb.org<br>
           Note: A Download button will appear when the number of referees entered equals the Referee Count from above.
         </div>
       </v-col>
@@ -380,8 +380,8 @@
         <div class="textblack">
           If the tournament director gives you a check, mail it to<br>
           Treasurer CHRVA-AAVO<br>
-          4650 Alcott Way #404<br>
-          Owings Mills, MD 21117
+          102 Sue Ann Ct<br>
+          Sterling, VA 20164
         </div>
       </v-col>
     </v-row>
